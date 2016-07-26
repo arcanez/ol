@@ -30,5 +30,5 @@ def db
 end
 
 def cols
-  @cols ||= @db.execute("PRAGMA table_info('businesses')").map { |c| c[1] }
+  @cols ||= db.execute("PRAGMA table_info('businesses')").map { |c| c[1] }
 end
