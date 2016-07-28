@@ -17,12 +17,16 @@ get '/businesses' do
 end
 
 get '/businesses/:id' do
+  retcode = 200
   res = Hash.new
   db.execute("SELECT * FROM businesses WHERE id = #{params[:id]}") do |row|
     row.each_with_index { |r,i| res[cols[i].to_sym] = r }
   end
-  res = { :error => 'Invalid ID provided.' } if res.empty?
-  [ 200, { 'Content-Type' => 'application/json' }, [ JSON.generate(res) ] ]
+  if res.empty?
+    res = { :error => 'Invalid ID provided.' }
+    retcode = 400
+  end
+  [ retcode, { 'Content-Type' => 'application/json' }, [ JSON.generate(res) ] ]
 end
 
 def db
